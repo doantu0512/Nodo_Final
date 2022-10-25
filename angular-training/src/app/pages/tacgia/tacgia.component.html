@@ -1,0 +1,113 @@
+<mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            {{formGroup.getRawValue().id ? 'Sửa':'Thêm'}} tác giả
+        </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="row">
+        <div class="col-12">
+            <form class="row"[formGroup]= "formGroup" >
+                <div class="col-6">
+                    <mat-form-field class="w-100" appearance="outline">
+                        <mat-label>ID </mat-label>
+                        <input matInput formControlName="id" type="text" class="w-100">
+                        <app-inline-message [formName]="formGroup.get('id')" [message]="'id'">
+                        </app-inline-message>
+                    </mat-form-field>
+                </div>
+                <div class="col-6">
+                    <mat-form-field class="w-100" appearance="outline">
+                        <mat-label>Mã tác giả</mat-label>
+                        <input matInput formControlName="maTacgia" type="text" class="w-100">
+                        <app-inline-message [formName]="formGroup.get('maTacgia')" [message]="'maTacGia'">
+                        </app-inline-message>
+                    </mat-form-field>
+                </div>
+                <div class="col-6">
+                    <mat-form-field class="w-100" appearance="outline">
+                        <mat-label>Tên</mat-label>
+                        <input matInput formControlName="tenTacGia" type="text" class="w-100">
+                        <app-inline-message [formName]="formGroup.get('tenTacGia')" [message]="'tenTacGia'">
+                        </app-inline-message>
+                    </mat-form-field>
+                </div>
+                <div class="col-6">
+                    <mat-form-field class="w-100" appearance="outline">
+                        <mat-label>Số điện thoại</mat-label>
+                        <input matInput formControlName="sdtTacGia" rows="3">
+                        <app-inline-message [formName]="formGroup.get('sdtTacGia')" [message]="'sdtTacGia'">
+                        </app-inline-message>
+                    </mat-form-field>
+                </div>
+                <div class="col-6">
+                    <mat-form-field class="w-100" appearance="outline">
+                        <mat-label>Địa chỉ</mat-label>
+                        <input matInput formControlName="diaChiTacGia" rows="3">
+                        <app-inline-message [formName]="formGroup.get('diaChiTacGia')" [message]="'diaChiTacGia'">
+                        </app-inline-message>
+                    </mat-form-field>
+                </div>
+                <div class="col-6">
+                    <mat-form-field class="w-100" appearance="outline">
+                        <mat-label>Mô tả</mat-label>
+                        <textarea matInput formControlName="moTaTacGia" rows="3"></textarea>
+                        <app-inline-message [formName]="formGroup.get('moTaTacGia')" [message]="'moTaTacgia'">
+                        </app-inline-message>
+                    </mat-form-field>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary" (click)="doSubmit()">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</mat-expansion-panel>
+<mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            {{'Danh Sách Tác Giả'}}
+        </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="table-responsive">
+        <ngx-datatable [ngClass]="'material'" [columnMode]="'flex'" [columns]="columns" rowHeight="auto"
+            [offset]="page.pageNumber" [limit]="page.size" [headerHeight]="50"
+            [footerHeight]="50" [rows]="items" [externalPaging]="false"
+            [messages]="{emptyMessage: 'Không có dữ liệu', totalMessage: 'bản ghi'}">
+            <ng-container *ngFor="let col of columns">
+                <ngx-datatable-column prop="{{ col.prop }}" name="{{ col.name }}" [flexGrow]="col.flexGrow">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        {{ column.name }}
+                    </ng-template>
+                    <ng-template let-value="value" let-rowIndex="rowIndex" ngx-datatable-cell-template let-row="row">
+                        <ng-container [ngSwitch]="col.prop">
+                            <ng-container *ngSwitchCase="'index'">
+                                {{ rowIndex + 1 + page.pageNumber * page.size }}
+                            </ng-container>
+
+                            <ng-container *ngSwitchCase="'ngaySinh'">
+                                {{ value | date: 'dd/MM/yyyy HH:mm:ss' }}
+                            </ng-container>
+                            <!-- <ng-container *ngSwitchCase="'trangThai'">
+                                {{ value == 1 ? 'Hoat dong' : 'Khong hoat dong'}}
+                            </ng-container> -->
+                            <ng-container *ngSwitchCase="'actions'" class="text-center">
+                                <button class="btn btn-sm btn-outline-primary mg-r-2" type="button" title="Sửa"
+                                    (click)="edit(row)">
+                                    <span class="fe fe-edit-2">Sua</span>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger mg-l-2" type="button" title="Xóa"
+                                    (click)="delete(row.id)">
+                                    <span class="fe fe-trash-2">Xoa</span>
+                                </button>
+                            </ng-container>
+
+                            <ng-container *ngSwitchDefault>
+                                <span title="{{ value }}">{{ value }}</span>
+                            </ng-container>
+                        </ng-container>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ng-container>
+        </ngx-datatable>
+    </div>
+</mat-expansion-panel>
